@@ -10,6 +10,7 @@ import Jimp from 'jimp'
 // Ours
 import NDI from './ndi.js'
 import { LeagueAPI } from './LeagueAPI.class.js'
+import { InfoCheck } from './infoCheck.js'
 
 process.on('SIGINT', () => {
     console.log('Caught interrupt signal')
@@ -138,6 +139,7 @@ async function run() {
         writeData(data)
     })
 
+    const infoChecks = {};
     const ndi = new NDI()
 
     const maskImg = await Jimp.read('./mask.png')
@@ -245,18 +247,38 @@ async function run() {
                             case 'left_drakes':
                             case 'right_drakes':
                                 if (!isNaN(parseInt(annotation.description))) {
-                                    data[sectorName] = annotation.description
+                                    const value = Number(annotation.description);
+                            
+                                    if (!infoChecks[sectorName]) {
+                                        infoChecks[sectorName] = new InfoCheck();
+                                    }
+                            
+                                    if (!isNaN(value)) {
+                                        infoChecks[sectorName].enqueue(value);
+                                        infoChecks[sectorName].display();
+                                    }
+                                    data[sectorName] = infoChecks[sectorName].determineMostFrequentOrRecent();
                                 }
-                                break
+                                break;
 
                             case 'left_gold':
                             case 'right_gold':
-                                if (
-                                    annotation.description.match(/^[0-9.]*k$/)
-                                ) {
-                                    data[sectorName] = annotation.description
+                                if (annotation.description.match(/^[0-9.]*k$/)) {
+                                    const goldValue = parseFloat(annotation.description.replace('k', '')) * 1000;
+                            
+                                    if (!infoChecks[sectorName]) {
+                                        infoChecks[sectorName] = new InfoCheck();
+                                    }
+                            
+                                    if (!isNaN(goldValue)) {
+                                        infoChecks[sectorName].enqueue(goldValue);
+                                        infoChecks[sectorName].display();
+                                    }
+                            
+                                    const mostFrequentOrRecent = infoChecks[sectorName].determineMostFrequentOrRecent();
+                                    data[sectorName] = (mostFrequentOrRecent / 1000).toFixed(1) + 'k';
                                 }
-                                break
+                                break;
 
                             default:
                                 data[sectorName] = annotation.description
