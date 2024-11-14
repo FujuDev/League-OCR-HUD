@@ -255,7 +255,6 @@ async function run() {
                             
                                     if (!isNaN(value)) {
                                         infoChecks[sectorName].enqueue(value);
-                                        infoChecks[sectorName].display();
                                     }
                                     data[sectorName] = infoChecks[sectorName].determineMostFrequentOrRecent();
                                 }
@@ -272,7 +271,6 @@ async function run() {
                             
                                     if (!isNaN(goldValue)) {
                                         infoChecks[sectorName].enqueue(goldValue);
-                                        infoChecks[sectorName].display();
                                     }
                             
                                     const mostFrequentOrRecent = infoChecks[sectorName].determineMostFrequentOrRecent();

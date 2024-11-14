@@ -17,25 +17,12 @@ export class InfoCheck {
         this.queue.push(value);
     }
 
-    dequeue() {
-        return this.queue.shift();
-    }
-
-    size() {
-        return this.queue.length;
-    }
-
     isEmpty() {
         return this.queue.length === 0;
     }
 
     getQueue() {
         return [...this.queue];
-    }
-
-    // Afficher les éléments de la file (utile pour le débogage)
-    display() {
-        console.log("File actuelle :", this.queue);
     }
 
     /**
