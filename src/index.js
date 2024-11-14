@@ -242,15 +242,17 @@ async function run() {
                             case 'right_kills':
                             case 'left_towers':
                             case 'right_towers':
-                            case 'left_heralds':
-                            case 'right_heralds':
+                            case 'left_heralds_and_nash':
+                            case 'left_voidgrubs':
+                            case 'right_heralds_and_nash':
+                            case 'right_voidgrubs':
                             case 'left_drakes':
                             case 'right_drakes':
                                 if (!isNaN(parseInt(annotation.description))) {
                                     const value = Number(annotation.description);
                             
                                     if (!infoChecks[sectorName]) {
-                                        infoChecks[sectorName] = new InfoCheck();
+                                        infoChecks[sectorName] = new InfoCheck(4);
                                     }
                             
                                     if (!isNaN(value)) {
